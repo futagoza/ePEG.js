@@ -1,0 +1,36 @@
+{
+  "name": "epeg.js",
+  "version": "0.0.0-checkpoint",
+  "description": "ePEG.js - Extended PEG.js for Node.js 4+",
+  "keywords": [
+    "pegjs",
+    "epeg",
+    "peg",
+    "parser",
+    "generator",
+    "extended",
+    "plugins",
+    "include",
+    "import",
+    "template",
+    "ecmascript",
+    "es2015",
+    "es2016",
+    "coffeescript",
+    "ast"
+  ],
+  "homepage": "https://github.com/futagoza/ePEG.js",
+  "repository": "futagoza/ePEG.js",
+  "bugs": "https://github.com/futagoza/ePEG.js/issues",
+  "license": "MIT",
+  "author": "Futago-za Ryuu <futagoza.ryuu@gmail.com>",
+
+  "main": "lib/epeg.js",
+  "bin": {
+    "epeg": "bin/epeg.js",
+    "pegjs": "bin/peg.js"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
+  }
+}
