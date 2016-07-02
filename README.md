@@ -1,5 +1,5 @@
 [![Build status](https://img.shields.io/travis/futagoza/ePEG.js.svg)](https://travis-ci.org/futagoza/ePEG.js)
-[![npm version](https://img.shields.io/npm/v/epegjs.svg)](https://www.npmjs.com/package/epegjs)
+[![npm version](https://img.shields.io/npm/v/epeg.js.svg)](https://www.npmjs.com/package/epeg.js)
 [![dependencies](https://img.shields.io/david/futagoza/ePEG.js.svg)](https://david-dm.org/futagoza/ePEG.js)
 [![devDependencies](https://img.shields.io/david/dev/futagoza/ePEG.js.svg)](https://david-dm.org/futagoza/ePEG.js#info=devDependencies)
 [![License](https://img.shields.io/badge/license-mit-blue.svg)](https://opensource.org/licenses/MIT)
@@ -22,13 +22,13 @@ It adds a number of syntax extensions and compiler passes that enable the follow
 ###### to use as a command line tool
 
 ```shell
-npm install -g epegjs
+npm install -g epeg.js
 ```
 
 ###### to use as a node.js module
 
 ```shell
-npm install --save-dev epegjs
+npm install --save-dev epeg.js
 ```
 
 # license
