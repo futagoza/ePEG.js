@@ -30,6 +30,32 @@
     "epeg": "bin/epeg.js",
     "pegjs": "bin/peg.js"
   },
+  "scripts": {
+    "compile": "npm run clean && npm run generate-parser && babel src --out-dir .",
+    "generate-parser": "pegjs src/parser.pegjs lib/parser.js",
+    "build-bin": "babel src/bin --out-dir bin",
+    "build-lib": "babel src/lib --out-dir lib",
+    "build-benchmark": "babel src/benchmark --out-dir benchmark",
+    "build-spec": "babel src/spec --out-dir spec",
+    "clean": "rimraf bin benchmark lib spec",
+    "benchmark": "node benchmark/run",
+    "spec": "mocha spec",
+    "test": "npm run benchmark && npm run spec"
+  },
+  "dependencies": {
+    "fs-extra": "0.30.0",
+    "pegjs-dev": "0.9.119",
+    "babel-runtime": "6.9.1"
+  },
+  "devDependencies": {
+    "babel-cli": "6.10.1",
+    "babel-preset-es2015-node4": "2.1.0",
+    "babel-preset-stage-0": "6.5.0",
+    "babel-plugin-undeclared-variables-check": "6.8.0",
+    "babel-plugin-transform-runtime": "6.9.0",
+    "rimraf": "2.5.2",
+    "mocha": "2.5.3"
+  },
   "engines": {
     "node": ">= 4.0.0"
   }
