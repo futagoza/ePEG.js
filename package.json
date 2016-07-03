@@ -31,8 +31,9 @@
     "pegjs": "bin/peg.js"
   },
   "scripts": {
-    "compile": "npm run clean && npm run generate-parser && babel src --out-dir .",
+    "compile": "npm run clean && npm run generate-parser && npm run build",
     "generate-parser": "mkdirp lib && pegjs --output lib/parser.js src/parser.pegjs",
+    "build": "babel src --out-dir .",
     "build-bin": "babel src/bin --out-dir bin",
     "build-lib": "babel src/lib --out-dir lib",
     "build-benchmark": "babel src/benchmark --out-dir benchmark",
