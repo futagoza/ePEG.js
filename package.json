@@ -32,10 +32,11 @@
   },
   "scripts": {
     "rebuild": "npm run clean && npm run build",
-    "generate-parser": "mkdirp lib && pegjs --output lib/parser.js src/parser.pegjs",
-    "build": "babel src --out-dir . && npm run generate-parser",
+    "generate-parser": "mkdirp lib && npm run build-parser",
+    "build": "babel src --out-dir . && npm run build-parser",
     "build-bin": "babel src/bin --out-dir bin",
     "build-lib": "babel src/lib --out-dir lib",
+    "build-parser": "pegjs --output lib/parser.js src/parser.pegjs",
     "build-benchmark": "babel src/benchmark --out-dir benchmark",
     "build-spec": "babel src/spec --out-dir spec",
     "clean": "rimraf bin benchmark lib spec",
