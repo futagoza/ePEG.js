@@ -39,7 +39,7 @@
     "build-spec": "babel src/spec --out-dir spec",
     "clean": "rimraf bin benchmark lib spec",
     "benchmark": "node benchmark/run",
-    "spec": "mocha spec",
+    "spec": "mocha spec --recursive",
     "test": "npm run benchmark && npm run spec"
   },
   "dependencies": {
@@ -52,7 +52,6 @@
     "babel-cli": "6.10.1",
     "babel-preset-es2015-node4": "2.1.0",
     "babel-preset-stage-0": "6.5.0",
-    "babel-plugin-undeclared-variables-check": "6.8.0",
     "babel-plugin-transform-runtime": "6.9.0",
     "rimraf": "2.5.2",
     "mocha": "2.5.3"

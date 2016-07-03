@@ -4,7 +4,6 @@
     "stage-0"
   ],
   "plugins": [
-    "undeclared-variables-check",
     ["transform-runtime", {
       "polyfill": true,
       "regenerator": false
