@@ -1,4 +1,5 @@
-benchmark
-spec
-src
-examples/*.js
+/benchmark
+/spec
+/src
+/examples/*.js
+/.babelrc
