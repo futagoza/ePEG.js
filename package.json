@@ -32,7 +32,7 @@
   },
   "scripts": {
     "compile": "npm run clean && npm run generate-parser && babel src --out-dir .",
-    "generate-parser": "pegjs src/parser.pegjs lib/parser.js",
+    "generate-parser": "mkdirp lib && pegjs --output lib/parser.js src/parser.pegjs",
     "build-bin": "babel src/bin --out-dir bin",
     "build-lib": "babel src/lib --out-dir lib",
     "build-benchmark": "babel src/benchmark --out-dir benchmark",
@@ -48,6 +48,7 @@
     "babel-runtime": "6.9.1"
   },
   "devDependencies": {
+    "mkdirp": "0.5.1",
     "babel-cli": "6.10.1",
     "babel-preset-es2015-node4": "2.1.0",
     "babel-preset-stage-0": "6.5.0",
