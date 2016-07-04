@@ -39,7 +39,7 @@
     "transpile:lib": "node scripts/transpile.js -p lib",
     "transpile:benchmark": "node scripts/transpile.js -p benchmark",
     "transpile:spec": "node scripts/transpile.js -p spec",
-    "clean": "rimraf bin benchmark lib spec",
+    "clean": "node scripts/remove.js",
     "benchmark": "node benchmark/run",
     "spec": "mocha spec --recursive",
     "test": "npm run benchmark && npm run spec"
