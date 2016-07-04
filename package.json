@@ -33,7 +33,7 @@
   "scripts": {
     "rebuild": "npm run clean && npm run build",
     "generate-parser": "mkdirp lib && npm run build-parser",
-    "build": "babel src --out-dir . && npm run build-parser",
+    "build": "babel src --out-dir .",
     "build-bin": "babel src/bin --out-dir bin",
     "build-lib": "babel src/lib --out-dir lib",
     "build-parser": "pegjs-dev --output lib/parser.js src/parser.pegjs",
