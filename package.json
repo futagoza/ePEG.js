@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "fs-extra": "0.30.0",
-    "pegjs": "pegjs/pegjs",
+    "pegjs-dev": "0.9.128",
     "babel-runtime": "6.9.1"
   },
   "devDependencies": {
