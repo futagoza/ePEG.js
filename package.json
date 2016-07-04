@@ -45,17 +45,16 @@
     "test": "npm run benchmark && npm run spec"
   },
   "dependencies": {
-    "fs-extra": "0.30.0",
+    "mkdirp": "0.5.1",
     "pegjs-dev": "0.9.128",
-    "babel-runtime": "6.9.1"
+    "babel-runtime": "6.9.2"
   },
   "devDependencies": {
-    "mkdirp": "0.5.1",
     "babel-core": "6.10.4",
     "babel-preset-es2015-node4": "2.1.0",
     "babel-preset-stage-0": "6.5.0",
     "babel-plugin-transform-runtime": "6.9.0",
-    "rimraf": "2.5.2",
+    "rimraf": "2.5.3",
     "mocha": "2.5.3"
   },
   "engines": {
