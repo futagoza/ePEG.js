@@ -36,7 +36,7 @@
     "build": "babel src --out-dir .",
     "build-bin": "babel src/bin --out-dir bin",
     "build-lib": "babel src/lib --out-dir lib",
-    "build-parser": "pegjs-dev --output lib/parser.js src/parser.pegjs",
+    "build-parser": "node scripts/generate-parser.js",
     "build-benchmark": "babel src/benchmark --out-dir benchmark",
     "build-spec": "babel src/spec --out-dir spec",
     "clean": "rimraf bin benchmark lib spec",
