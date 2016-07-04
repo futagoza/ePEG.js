@@ -18,11 +18,7 @@ addons:
 
 install:
   - npm install
-
-before_script:
   - npm run build
-  #- ls -I node_modules -R1U
-  - npm run build-parser
 
 script:
   - npm run benchmark
