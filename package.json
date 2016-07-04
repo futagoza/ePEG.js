@@ -33,7 +33,7 @@
   "scripts": {
     "rebuild": "npm run clean && npm run build",
     "build": "npm run generator && npm run transpiler",
-    "generator": "pegjs --output lib/parser.js src/parser.pegjs",
+    "generator": "node scripts/generate-parser.js",
     "transpiler": "node scripts/transpile.js",
     "transpile:bin": "node scripts/transpile.js -p bin",
     "transpile:lib": "node scripts/transpile.js -p lib",

@@ -3,7 +3,7 @@
 /*--------- 1) Dependencies ---------*/
 
 var fs = require('fs')
-var peg = require('pegjs-dev')
+var peg = require('pegjs')
 var mkdirp = require('mkdirp')
 
 /*--------- 2) Options ---------*/
