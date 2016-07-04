@@ -3,9 +3,9 @@
 /*--------- 1) Dependencies ---------*/
 
 var fs = require('fs')
-var peg = require('pegjs-dev')
-var mkdirp = require('mkdirp')
 var program = require('commander')
+var mkdirp = require('mkdirp').sync
+var buildParser = require('pegjs-dev').generate
 
 /*--------- 2) Options ---------*/
 
@@ -14,22 +14,26 @@ program
   .option('--trace', 'enable tracing in generated parser (default: false)', false)
   .parse(process.argv)
 
+var source = 'src/parser.pegjs'
+var target = 'lib/parser.js'
+
 var options = {
+  filename: source,
   format: 'bare',
   optimize: program.optimize,
   output: "source",
   trace: !!program.trace
 }
 
-/*--------- 3) Generate parser ---------*/
+/*--------- 3) Generate ---------*/
 
-mkdirp.sync('lib')
+mkdirp('lib')
 
-var source = fs.readFileSync('src/parser.pegjs', 'utf-8')
+fs.writeFileSync(target, '\'use strict\';\n' +
 
-var output = '\'use strict\';\n\n'
-output += 'module.exports = '
-output += peg.generate(source, options)
-output += '\n'
+  buildParser(fs.readFileSync(source, 'utf-8'), options)
+    .replace('(function', 'module.exports = (function')
 
-fs.writeFileSync('lib/parser.js', output)
++ ';\n')
+
+console.log(source + ' -> ' + target)

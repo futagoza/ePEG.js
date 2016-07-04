@@ -4,13 +4,9 @@
 
 var fs = require('fs')
 var path = require('path')
-var babel = require('babel-core')
-var mkdirp = require('mkdirp')
 var program = require('commander')
-
-var join = path.join
-var dirname = path.dirname
-var extname = path.extname
+var babel = require('babel-core')
+var mkdirp = require('mkdirp').sync
 
 /*--------- 2) Options ---------*/
 
@@ -21,8 +17,6 @@ program
   .option('--comments', 'preserve comments from source files to generated files')
   .option('-R, --target <dir>', 'select directory in source to build (default: all)', null)
   .parse(process.argv)
-
-var cwd = process.cwd()
 
 var options = {
   babelrc: false,
@@ -44,15 +38,19 @@ var options = {
 
 /*--------- 3) Utils ---------*/
 
-function format ( path ) {
-  return path.replace(cwd, '').slice(1)
+var __cwdname = process.cwd()
+
+var resolve = path.join
+
+var format = function ( filename ) {
+  return filename.replace(__cwdname, '').slice(1)
 }
 
-function generate ( from, to ) {
+function transform ( from, to ) {
   var source = fs.readFileSync(from, 'utf-8')
   options.filename = from
   source = babel.transform(source, options)
-  mkdirp.sync(dirname(to))
+  mkdirp(path.dirname(to))
   fs.writeFileSync(to, source.code + '\n')
   if ( options.sourceMaps ) {
     fs.writeFileSync(to + '.map', source.map)
@@ -60,31 +58,31 @@ function generate ( from, to ) {
   console.log(format(from) + ' -> ' + format(to))
 }
 
-function readFiles ( filename ) {
-  var path = join(cwd, 'src', filename)
-  var stat = fs.lstatSync(path)
+/*--------- 4) Transpile... ---------*/
+
+function transpile ( basename ) {
+  var from = resolve(__cwdname, 'src', basename)
+  var stat = fs.lstatSync(from)
   if ( stat.isDirectory() )
-    fs.readdirSync(path)
+    fs.readdirSync(from)
       .forEach(function(item){
-        readFiles(join(filename, item))
+        transpile(resolve(basename, item))
       })
   else
-    if ( extname(filename) === '.js' ) {
-      generate(path, join(cwd, filename))
+    if ( path.extname(basename) === '.js' ) {
+      transform(from, resolve(__cwdname, basename))
     }
 }
 
-/*--------- 4) Transpile... ---------*/
-
 if ( program.target && program.target !== 'all' && program.target !== '*' ) {
 
-  readFiles(program.target)
+  transpile(program.target)
 
 } else {
 
-  readFiles('benchmark')
-  readFiles('bin')
-  readFiles('lib')
-  readFiles('spec')
+  transpile('benchmark')
+  transpile('bin')
+  transpile('lib')
+  transpile('spec')
 
 }
