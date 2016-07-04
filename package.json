@@ -33,7 +33,7 @@
   "scripts": {
     "rebuild": "npm run clean && npm run build",
     "build": "npm run generator && npm run transpiler",
-    "generator": "node scripts/generate-parser.js",
+    "generator": "pegjs --output lib/parser.js src/parser.pegjs",
     "transpiler": "node scripts/transpile.js",
     "transpile:bin": "node scripts/transpile.js -p bin",
     "transpile:lib": "node scripts/transpile.js -p lib",
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "fs-extra": "0.30.0",
-    "pegjs-dev": "0.9.119",
+    "pegjs": "pegjs/pegjs",
     "babel-runtime": "6.9.1"
   },
   "devDependencies": {
