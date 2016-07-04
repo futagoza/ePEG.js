@@ -5,16 +5,20 @@
 var fs = require('fs')
 var peg = require('pegjs-dev')
 var mkdirp = require('mkdirp')
+var program = require('commander')
 
 /*--------- 2) Options ---------*/
 
-var argv = process.argv.slice(2)
+program
+  .option('-O, --optimize <goal>', 'select optimization for speed or size (default: speed)', 'speed')
+  .option('--trace', 'enable tracing in generated parser (default: false)', false)
+  .parse(process.argv)
 
 var options = {
   format: 'bare',
-  optimize: ~argv.indexOf('--size') ? 'size' : 'speed',
+  optimize: program.optimize,
   output: "source",
-  trace: argv.indexOf('--trace') !== -1
+  trace: !!program.trace
 }
 
 /*--------- 3) Generate parser ---------*/

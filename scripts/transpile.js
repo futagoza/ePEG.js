@@ -6,6 +6,7 @@ var fs = require('fs')
 var path = require('path')
 var babel = require('babel-core')
 var mkdirp = require('mkdirp')
+var program = require('commander')
 
 var join = path.join
 var dirname = path.dirname
@@ -13,11 +14,15 @@ var extname = path.extname
 
 /*--------- 2) Options ---------*/
 
-var argv = process.argv.slice(2)
+program
+  .option('--sourceMaps', 'enable source maps for generated files')
+  .option('-c, --compact', 'do not include superfluous whitespace characters and line terminators')
+  .option('-m, --minify', 'minifies generated source before writing files')
+  .option('--comments', 'preserve comments from source files to generated files')
+  .option('-R, --target <dir>', 'select directory in source to build (default: all)', null)
+  .parse(process.argv)
 
-var sourceMaps = argv.indexOf('-d') !== -1
 var cwd = process.cwd()
-var project = argv.indexOf('-p')
 
 var options = {
   babelrc: false,
@@ -31,10 +36,10 @@ var options = {
       "regenerator": false
     }]
   ],
-  sourceMaps: !!sourceMaps ? "both" : false,
-  compact: ~argv.indexOf('--compact') ? true : 'auto',
-  minified: argv.indexOf('-m') !== -1,
-  comments: argv.indexOf('--comments') !== -1
+  sourceMaps: !!program.sourceMaps ? "both" : false,
+  compact: program.compact ? true : 'auto',
+  minified: !!program.minify,
+  comments: !!program.comments
 }
 
 /*--------- 3) Utils ---------*/
@@ -49,7 +54,7 @@ function generate ( from, to ) {
   source = babel.transform(source, options)
   mkdirp.sync(dirname(to))
   fs.writeFileSync(to, source.code + '\n')
-  if ( sourceMaps ) {
+  if ( options.sourceMaps ) {
     fs.writeFileSync(to + '.map', source.map)
   }
   console.log(format(from) + ' -> ' + format(to))
@@ -71,13 +76,9 @@ function readFiles ( filename ) {
 
 /*--------- 4) Transpile... ---------*/
 
-if ( project !== -1 ) {
+if ( program.target && program.target !== 'all' && program.target !== '*' ) {
 
-  project = argv[project + 1]
-  if ( !project || project.charAt(0) === '-' ) {
-    throw new Error('You must provide a valid argument for the \'-p\' flag')
-  }
-  readFiles(project)
+  readFiles(program.target)
 
 } else {
 
