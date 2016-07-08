@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "commander": "2.9.0",
+    "globby": "5.0.0",
     "mkdirp": "0.5.1",
     "pegjs-dev": "0.9.128",
     "babel-runtime": "6.9.2"
