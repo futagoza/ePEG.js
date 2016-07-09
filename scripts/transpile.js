@@ -15,7 +15,7 @@ program
   .option('-c, --compact', 'do not include superfluous whitespace characters and line terminators')
   .option('-m, --minify', 'minifies generated source before writing files')
   .option('--comments', 'preserve comments from source files to generated files')
-  .option('-R, --target <dir>', 'select directory in source to build (default: all)', null)
+  .option('-R, --target <dir>', 'select directory in source to build (default: all)', 'all')
   .parse(process.argv)
 
 var options = {
@@ -74,9 +74,14 @@ function transpile ( basename ) {
     }
 }
 
-if ( program.target && program.target !== 'all' && program.target !== '*' ) {
+var target = program.target
 
-  transpile(program.target)
+if ( target && target !== 'all' ) {
+
+  if ( target.indexOf(',') !== -1 )
+    target.split(",").map(function(s){ return s.trim() }).forEach(transpile)
+  else
+    transpile(target)
 
 } else {
 
