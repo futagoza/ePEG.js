@@ -1,6 +1,6 @@
 'use strict'
 
-var fs = require('fs')
+var globby = require('globby')
 var rimraf = require('rimraf')
 var argv = process.argv.slice(2)
 
@@ -11,30 +11,26 @@ function handleError ( err ) {
   }
 }
 
-function remove ( path ) {
-  fs.lstat(path, function(err){
-    if ( err ) {
-      if (err.code != 'ENOENT') handleError(err)
-    } else {
+if ( argv.length === 0 ) {
+
+  argv = [
+    'benchmark',
+    'bin',
+    'lib',
+    'spec',
+    'examples/*.js',
+    'npm-debug.log'
+  ]
+
+}
+
+globby(argv)
+  .then(function(files){
+    files.forEach(function(path){
       rimraf(path, function(err){
         handleError(err)
         console.log('Removed ' + path)
       })
-    }
+    })
   })
-}
-
-if ( argv.length ) {
-
-  argv.forEach(remove)
-
-} else {
-
-  remove('benchmark')
-  remove('bin')
-  remove('lib')
-  remove('spec')
-  remove('examples/*.js')
-  remove('npm-debug.log')
-
-}
+  .catch(handleError)
