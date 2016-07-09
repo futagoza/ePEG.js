@@ -62,19 +62,33 @@
   function buildList(head, tail, index) {
     return [head].concat(extractList(tail, index));
   }
+
+  var peg$location = location
+  location = function ( ) {
+    var position = peg$location()
+    position.filename = options.filename
+    return position
+  }
 }
 
 /* ---- Syntactic Grammar ----- */
 
 Grammar
-  = __ initializer:(Initializer __)? rules:(Rule __)+ {
+  = __ initializer:(Initializer __)? externals:(Require __)* rules:(Rule __)+ {
       return {
         type:        "grammar",
         initializer: extractOptional(initializer, 0),
+        externals:   extractList(externals, 0),
         rules:       extractList(rules, 0),
         location:    location()
       };
     }
+
+Require
+  = "@" type:("include" / "import") _ path:StringLiteral EOS {
+      return { type: type, path: path, location: location() };
+    }
+
 
 Initializer
   = code:CodeBlock EOS {
