@@ -25,6 +25,12 @@ var options = {
   trace: !!program.trace
 }
 
+var optimize = options.optimize
+if ( optimize !== 'speed' && optimize !== 'size' ) {
+  console.error('ERROR: Optimization goal must be either "speed" or "size".')
+  process.exit(1)
+}
+
 /*--------- 3) Generate ---------*/
 
 mkdirp('lib')
