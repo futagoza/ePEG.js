@@ -8,15 +8,6 @@
 
 ePEG.js (Extended PEG.js) is an extension of [PEG.js](https://github.com/pegjs/pegjs) made for Node.js 4 and above.
 
-It adds a number of syntax extensions and compiler passes that enable the following features:
-
-* `[TODO]` Include statements (`@include ...`) for local grammar files
-* `[TODO]` Import statements (`@import ...`) for Node.js modules that contain grammar files
-* `[TODO]` Template rules (`rule<T> = ... b:T ...`) to avoid repeated PEG.js grammar
-* `[TODO]` Optional ECMAScript 2015+ transformers (Babel 6 or Buble) for `.pegjs` files
-* `[TODO]` Optional CoffeeScript transformer for `.pegcoffee` files
-* `[TODO]` Optional AST generator for rules with titled sequence's but no code blocks
-
 # install
 
 ###### to use as a command line tool
@@ -30,6 +21,25 @@ npm install -g epeg.js
 ```shell
 npm install --save-dev epeg.js
 ```
+
+# features & changes
+
+###### command line (via `epeg [options] <files ...>`)
+
+* Multi file glob support via command line only
+* Support for `-f, --format <mode>`, mode being `umd` or `bare`
+* Verbose logging if `--verbose` is passed to ePeg.js
+
+###### core changes (via `var epeg = require('epeg.js')`)
+
+ePeg.js adds a number of optional syntax extensions and/or compiler passes via plugins that enable the following (all available as exported plugins):
+
+* Multi file support via `epeg.generate(input, { files: [...] })` _(no glob support)_
+* Include statements (`@include ...`) for local grammar files
+* Import statements (`@import ...`) for Node.js modules that contain grammar files
+* Template rules (`rule<T> = ... b:T ...`) to avoid repeated PEG.js grammar
+* A ECMAScript 2015+ transformer (via Babel 6) for code blocks
+* AST generator for rules with titled sequence's but no code blocks
 
 # license
 
