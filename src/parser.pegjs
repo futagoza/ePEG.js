@@ -74,17 +74,17 @@
 /* ---- Syntactic Grammar ----- */
 
 Grammar
-  = __ initializer:(Initializer __)? externals:(Require __)* rules:(Rule __)+ {
+  = __ initializer:(Initializer __)? dependencies:(Dependency __)* rules:(Rule __)+ {
       return {
-        type:        "grammar",
-        initializer: extractOptional(initializer, 0),
-        externals:   extractList(externals, 0),
-        rules:       extractList(rules, 0),
-        location:    location()
+        type:         "grammar",
+        initializer:  extractOptional(initializer, 0),
+        dependencies: extractList(dependencies, 0),
+        rules:        extractList(rules, 0),
+        location:     location()
       };
     }
 
-Require
+Dependency
   = "@" type:("include" / "import") _ path:StringLiteral EOS {
       return { type: type, path: path, location: location() };
     }

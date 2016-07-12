@@ -21,8 +21,8 @@ export function use ( config, options ) {
           }
           ast.initializer.code =+ `\n${ grammer.initializer.code }\n`
         }
-        if ( grammer.externals && grammer.externals.length ) {
-          ast.externals.push(...grammer.externals)
+        if ( grammer.dependencies.length ) {
+          ast.dependencies.push(...grammer.dependencies)
         }
         ast.rules.push(...grammer.rules)
       })
