@@ -96,24 +96,62 @@ Initializer
     }
 
 Rule
-  = name:IdentifierName __
-    displayName:(StringLiteral __)?
-    "=" __
+  = name:RuleName __
     expression:Expression EOS
     {
       return {
         type:        "rule",
-        name:        name,
-        expression:  displayName !== null
+        name:        name[0],
+        params:      name[2] !== null ? name[2][0] : [],
+        expression:  name[3] !== null
           ? {
               type:       "named",
-              name:       displayName[0],
+              name:       name[3][0],
               expression: expression,
               location:   location()
             }
           : expression,
         location:    location()
       };
+    }
+
+RuleName
+  = IdentifierName __
+    (TemplateParams __)?
+    (StringLiteral __)?
+    "="
+
+TemplateParams
+  = "<" __ head:OptionalParameter tail:(__ "," __ OptionalParameter)* __ ">" {
+      return buildList(head, tail, 3)
+    }
+  / "<" __ head:RequiredParameter tail:(__ "," __ RequiredParameter)* rest:(__ "," __ OptionalParameter)* __ ">" {
+      if ( tail.length && rest.length ) {
+        return [head].concat(extractList(tail, 3), extractList(rest, 3));
+      }
+      if ( tail.length || rest.length ) {
+        return [head].concat(extractList(tail.length ? tail : rest, 3));
+      }
+      return [head];
+    }
+
+OptionalParameter
+  = name:IdentifierName __ "=" __ defaultValue:Expression {
+      return {
+        type:     "parameter",
+        name:     name,
+        value:    defaultValue,
+        location: location()
+      }
+    }
+
+RequiredParameter
+  = name:IdentifierName {
+      return {
+        type:     "parameter",
+        name:     name,
+        location: location()
+      }
     }
 
 Expression
@@ -213,8 +251,27 @@ PrimaryExpression
     }
 
 RuleReferenceExpression
-  = name:IdentifierName !(__ (StringLiteral __)? "=") {
-      return { type: "rule_ref", name: name, location: location() };
+  = !RuleName name:IdentifierName args:(__ TemplateArgs)? {
+      return {
+        type: "rule_ref",
+        name: name,
+        args: args !== null ? args[1] : [],
+        location: location()
+      };
+    }
+
+TemplateArgs
+  = "<" __ head:Argument tail:(__ "," __ Argument)* __ ">" {
+      return buildList(head, tail, 3)
+    }
+
+Argument
+  = expression:Expression {
+      return {
+        type: "argument",
+        expression: expression,
+        location: location()
+      };
     }
 
 SemanticPredicateExpression
