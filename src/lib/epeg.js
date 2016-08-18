@@ -13,6 +13,7 @@ export const versions = {
 export const GrammarError = peg.GrammarError
 export const parser = require('./parser')
 export const compiler = peg.compiler
+export const utils = require('./utils')
 
 export const IncludePlugin = require('./plugins/include')
 export const ImportPlugin = require('./plugins/import')
