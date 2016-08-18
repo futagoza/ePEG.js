@@ -83,7 +83,7 @@ program
   .option('-e, --export-var <variable>',       'name of a global variable into which the parser object is optional assigned to when no module loader is detected')
   .option('    --extra-options <options>',     'additional options (in JSON format) to pass to peg.generate')
   .option('    --extra-options-file <file>',   'file with additional options (in JSON format) to pass to peg.generate')
-  .option('-f, --format <mode>',               'select wrapper format for umd or bare (default: umd)', 'umd')
+  .option('-f, --format <mode>',               'format of the generated parser: amd, bare, commonjs, globals, umd (default: commonjs)', 'commonjs')
   .option('-O, --optimize <goal>',             'select optimization for speed or size (default: speed)', 'speed')
   .option('-o, --output <file>',               'output file')
   .option('    --plugin <plugin>',             'use a specified plugin (can be specified multiple times)', collectArg, [])
@@ -105,7 +105,7 @@ var options = {
   cache:        !!program.cache,
   dependencies: {},
   exportVar:    program.exportVar,
-  format:       restrictOption('Wrapper format', ['umd', 'bare'], program.format),
+  format:       restrictOption('Module format', ['amd', 'bare', 'commonjs', 'globals', 'umd'], program.format),
   optimize:     restrictOption('Optimization goal', ['speed', 'size'], program.optimize),
   output:       "source",
   plugins:      [],

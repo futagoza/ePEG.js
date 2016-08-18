@@ -19,7 +19,7 @@ var target = 'lib/parser.js'
 
 var options = {
   filename: source,
-  format: 'bare',
+  format: 'commonjs',
   optimize: program.optimize,
   output: "source",
   trace: !!program.trace
@@ -35,11 +35,6 @@ if ( optimize !== 'speed' && optimize !== 'size' ) {
 
 mkdirp('lib')
 
-fs.writeFileSync(target, '\'use strict\';\n' +
-
-  buildParser(fs.readFileSync(source, 'utf-8'), options)
-    .replace('(function', 'module.exports = (function')
-
-+ ';\n')
+fs.writeFileSync(target, buildParser(fs.readFileSync(source, 'utf-8'), options))
 
 console.log(source + ' -> ' + target)
