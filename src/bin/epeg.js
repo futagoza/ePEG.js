@@ -46,14 +46,6 @@ function collectArg ( value, memo ) {
   return memo
 }
 
-function restrictOption ( name, values, value ) {
-  if ( values.indexOf(value) === -1 ) {
-    values = values.map(s => `"${ s }"`)
-    abort(`${ name } must be either ${ values.join('or') }.`)
-  }
-  return value
-}
-
 function addExtraOptions ( options, json ) {
   try {
     let extraOptions = JSON.parse(json)
@@ -80,7 +72,7 @@ program
   .option('    --allowed-start-rules <rules>', 'comma-separated list of rules the generated parser will be allowed to start parsing from (default: the first rule in the grammar)', createList)
   .option('    --cache',                       'make generated parser cache results')
   .option('-d, --dependency <dependency>',     'use specified dependency (can be specified multiple times)', collectArg, [])
-  .option('-e, --export-var <variable>',       'name of a global variable into which the parser object is optional assigned to when no module loader is detected')
+  .option('-e, --export-var <variable>',       'name of a global variable into which the parser object is assigned to when no module loader is detected')
   .option('    --extra-options <options>',     'additional options (in JSON format) to pass to peg.generate')
   .option('    --extra-options-file <file>',   'file with additional options (in JSON format) to pass to peg.generate')
   .option('-f, --format <mode>',               'format of the generated parser: amd, bare, commonjs, globals, umd (default: commonjs)', 'commonjs')
@@ -104,10 +96,9 @@ var outputFile = program.output
 var options = {
   cache:        !!program.cache,
   dependencies: {},
-  exportVar:    program.exportVar,
-  format:       restrictOption('Module format', ['amd', 'bare', 'commonjs', 'globals', 'umd'], program.format),
-  optimize:     restrictOption('Optimization goal', ['speed', 'size'], program.optimize),
-  output:       "source",
+  format:       program.format,
+  optimize:     program.optimize,
+  output:       'source',
   plugins:      [],
   trace:        !!program.trace
 }
@@ -124,11 +115,23 @@ program.dependency.forEach(name => {
   options.dependencies[id] = name
 })
 
+if ( program.exportVar ) {
+  options.exportVar = program.exportVar
+}
+
+if ( !['amd', 'bare', 'commonjs', 'globals', 'umd'].includes(program.format) ) {
+  abort('Module format must be one of "amd", "bare", "commonjs", "globals", and "umd".')
+}
+
+if ( !['speed', 'size'].includes(program.optimize) ) {
+  abort('Optimization goal must be either "speed" or "size".')
+}
+
 info('Default options set')
 
 if ( program.extraOptions ) {
   addExtraOptions(options, program.extraOptions)
-  info('Added extra options from "-e" or "--export-var"')
+  info('Added extra options from "--extra-options"')
 }
 
 if ( program.extraOptionsFile ) {
