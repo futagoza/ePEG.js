@@ -27,7 +27,7 @@ npm install --save-dev epeg.js
 ###### command line (via `epeg [options] <files ...>`)
 
 * Multi file glob support via command line only
-* Support for `-f, --format <mode>`, mode being `umd` or `bare`
+* Support for `bare` module format when using `-f` or `--format`
 * Verbose logging if `--verbose` is passed to ePeg.js
 
 ###### core changes (via `var epeg = require('epeg.js')`)
