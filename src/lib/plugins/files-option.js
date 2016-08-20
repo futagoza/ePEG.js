@@ -1,6 +1,6 @@
 'use strict'
 
-import { readFileSync } from 'fs'
+import { inlineGrammer } from '../utils'
 
 export function use ( config, options ) {
   if ( Array.isArray(options.files) && options.files.length ) {
@@ -8,27 +8,12 @@ export function use ( config, options ) {
     if ( !config.passes.preprocess ) {
       config.passes = Object.assign({ preprocess: [] }, config.passes)
     }
-    let preprocess = config.passes.preprocess
 
-    function inlineFiles ( ast, options ) {
-      let parser = config.parser
-
+    config.passes.preprocess.push(( ast, options ) => {
       options.files.forEach(filename => {
-        let grammer = parser.parse(readFileSync(filename, 'utf-8'), { filename })
-        if ( grammer.initializer ) {
-          if ( !ast.initializer ) {
-            ast.initializer = { type: "initializer", code: '', location: ast.location }
-          }
-          ast.initializer.code =+ `\n${ grammer.initializer.code }\n`
-        }
-        if ( grammer.dependencies.length ) {
-          ast.dependencies.push(...grammer.dependencies)
-        }
-        ast.rules.push(...grammer.rules)
+        inlineGrammer(filename, ast, config.parser)
       })
-    }
-
-    preprocess.push(inlineFiles)
+    })
 
   }
 }
