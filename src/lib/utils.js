@@ -23,13 +23,14 @@ export function extendInitializer ( ast, javascript ) {
   if ( !ast.initializer ) {
     ast.initializer = { type: "initializer", code: '', location: ast.location }
   }
-  ast.initializer.code =+ `\n${ javascript }\n`
+  ast.initializer.code =+ `\n// ${ javascript.location.filename }\n`
+  ast.initializer.code =+ `\n${ javascript.code }\n`
 }
 
 export function inlineGrammer ( filename, ast, parser ) {
   let grammer = parser.parse(readFileSync(filename, 'utf-8'), { filename })
   if ( grammer.initializer ) {
-    extendInitializer(ast, grammer.initializer.code)
+    extendInitializer(ast, grammer.initializer)
   }
   if ( grammer.dependencies.length ) {
     ast.dependencies.push(...grammer.dependencies)

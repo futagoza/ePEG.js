@@ -39,7 +39,10 @@ export function use ( config, options ) {
             inlineGrammer(filename, ast, config.parser)
           }
           else if ( ext === '.js' ) {
-            extendInitializer(ast, readFileSync(filename, 'utf-8'))
+            extendInitializer(ast, {
+              code: readFileSync(filename, 'utf-8'),
+              location: { filename }
+            })
           }
         }
 
