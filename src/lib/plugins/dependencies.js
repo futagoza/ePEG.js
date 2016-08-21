@@ -1,16 +1,12 @@
 'use strict'
 
-import { inlineGrammer, extendInitializer } from '../utils'
+import { extendStage, inlineGrammer, extendInitializer } from '../utils'
 import { dirname, extname, join } from 'path'
 import { readFileSync } from 'fs'
 
-export function use ( config, options ) {
+export function use ( config ) {
   
-  if ( !config.passes.preprocess ) {
-    config.passes = Object.assign({ preprocess: [] }, config.passes)
-  }
-
-  config.passes.preprocess.push(( ast, options ) => {
+  extendStage(config, 'preprocess', ( ast, options ) => {
     const dependencies = ast.dependencies
 
     if ( Array.isArray(dependencies) && dependencies.length ) {

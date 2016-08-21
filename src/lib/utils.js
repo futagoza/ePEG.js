@@ -2,6 +2,15 @@
 
 import { readFileSync } from 'fs'
 
+export function extendStage ( config, stageName, pass ) {
+  var stage = config.passes[stageName]
+  if ( !Array.isArray(stage) ) {
+    config.passes = { [stageName]: [], ...config.passes }
+    stage = config.passes[stageName]
+  }
+  stage.push(pass)
+}
+
 // ES2016+ feature, included in Node 6+ only
 const __includes = Array.prototype.includes
                 || function ( value ) {
