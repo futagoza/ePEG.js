@@ -11,7 +11,7 @@ const globby = require('globby')
 /*--------- Helpers ---------*/
 
 const exit = process.exit
-const includes = epeg.utils.includes
+const { arrayIncludes } = epeg.utils
 
 function ensureZero ( number ) {
   if ( parseInt(number) < 10 ) {
@@ -110,7 +110,7 @@ if ( program.allowedStartRules ) {
 
 program.dependency.forEach(name => {
   var id = name
-  if ( includes(name, ':') ) {
+  if ( name.includes(':') ) {
     [id, name] = name.split(':')
   }
   options.dependencies[id] = name
@@ -120,11 +120,11 @@ if ( program.exportVar ) {
   options.exportVar = program.exportVar
 }
 
-if ( !includes(['amd', 'bare', 'commonjs', 'globals', 'umd'], program.format) ) {
+if ( !arrayIncludes(['amd', 'bare', 'commonjs', 'globals', 'umd'], program.format) ) {
   abort('Module format must be one of "amd", "bare", "commonjs", "globals", and "umd".')
 }
 
-if ( !includes(['speed', 'size'], program.optimize) ) {
+if ( !arrayIncludes(['speed', 'size'], program.optimize) ) {
   abort('Optimization goal must be either "speed" or "size".')
 }
 
