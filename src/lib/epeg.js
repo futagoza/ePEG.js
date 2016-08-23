@@ -15,9 +15,10 @@ export const parser = require('./parser')
 export const compiler = peg.compiler
 export const utils = require('./utils')
 
+export const FilesOptionPlugin = require('./plugins/files-option')
 export const IncludePlugin = require('./plugins/include')
 export const ImportPlugin = require('./plugins/import')
-export const FilesOptionPlugin = require('./plugins/files-option')
+export const AutoAstPlugin = require('./plugins/auto-ast')
 
 export var defaultPlugins = null
 
@@ -26,7 +27,7 @@ export function setDefaultPlugins ( ...plugins ) {
 }
 
 export function restoreDefaultPlugins ( ) {
-  defaultPlugins = [IncludePlugin, ImportPlugin, FilesOptionPlugin]
+  defaultPlugins = [FilesOptionPlugin, IncludePlugin, ImportPlugin, AutoAstPlugin]
 }
 restoreDefaultPlugins()
 
