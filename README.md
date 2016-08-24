@@ -38,7 +38,6 @@ ePeg.js adds a number of optional syntax extensions and/or compiler passes via p
 * Include statements (`@include ...`) for local grammar files
 * Import statements (`@import ...`) for Node.js modules that contain grammar files
 * Template rules (`rule<T> = ... b:T ...`) to avoid repeated PEG.js grammar
-* A ECMAScript 2015+ transformer (via Babel 6) for code blocks
 * AST generator for rules with labeled sequence's but no code blocks
 
 # license

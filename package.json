@@ -14,9 +14,6 @@
     "import",
     "template",
     "ecmascript",
-    "es2015",
-    "es2016",
-    "coffeescript",
     "ast"
   ],
   "homepage": "https://github.com/futagoza/ePEG.js",
