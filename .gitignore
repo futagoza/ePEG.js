@@ -1,7 +1,6 @@
-/benchmark
 /bin
 /lib
 /node_modules
-/spec
+/test
 /examples/*.js
 /npm-debug.log

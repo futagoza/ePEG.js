@@ -102,7 +102,7 @@ Rule
       return {
         type:        "rule",
         name:        name[0],
-        params:      name[2] !== null ? name[2][0] : [],
+        params:      name[2] !== null ? name[2][0] : null,
         expression:  name[3] !== null
           ? {
               type:       "named",
@@ -138,7 +138,6 @@ TemplateParams
 OptionalParameter
   = name:IdentifierName __ "=" __ defaultValue:Expression {
       return {
-        type:     "parameter",
         name:     name,
         value:    defaultValue,
         location: location()
@@ -148,7 +147,6 @@ OptionalParameter
 RequiredParameter
   = name:IdentifierName {
       return {
-        type:     "parameter",
         name:     name,
         location: location()
       }
@@ -255,23 +253,14 @@ RuleReferenceExpression
       return {
         type: "rule_ref",
         name: name,
-        args: args !== null ? args[1] : [],
+        args: args !== null ? args[1] : null,
         location: location()
       };
     }
 
 TemplateArgs
-  = "<" __ head:Argument tail:(__ "," __ Argument)* __ ">" {
+  = "<" __ head:Expression tail:(__ "," __ Expression)* __ ">" {
       return buildList(head, tail, 3)
-    }
-
-Argument
-  = expression:Expression {
-      return {
-        type: "argument",
-        expression: expression,
-        location: location()
-      };
     }
 
 SemanticPredicateExpression

@@ -6,39 +6,53 @@
 
 # about ePEG.js
 
-ePEG.js (Extended PEG.js) is an extension of [PEG.js](https://github.com/pegjs/pegjs) made for Node.js 4 and above.
+Originally intended to be a set of plugins for [PEG.js](https://github.com/pegjs/pegjs) itself, ePEG.js (Extended PEG.js) is now a extended rewrite of PEG.js made for Node.js v4 and above.
+
+# features
+
+- Multi file glob support via command line: `epegjs [OPTIONS] <...files>`
+- __[todo]__ An _optional_ location field returned with every AST of a ePEG.js grammar file
+- __[todo]__ `@import FILENAME` will import all rules from `FILENAME`, which can be a PEG.js or ePEG.js gammar file
+- __[todo]__ `@import RULE = FILENAME` will import the given `RULE` only from the `FILENAME` grammar
+- __[todo]__ Template rules (`Sequence<T R> = (__ R __ T)*`) to avoid repeated PEG.js grammar
+- __[todo]__ Default arguments for templates (`EXPRESSION` or `GROUP`): `ElementList<T S=','> = T Sequence<T S>`
+- __[todo]__ Spread operator to concat a sequence with only 2 expressions: `ArgumentList<T> = T ...Sequence<T ','>`
+- __[todo]__ Control of Repetition (`RULE = EXPRESSION+ / EXPRESSION*`) using `++RULE` or `--RULE` (see 1)
+- __[todo]__ AST generator for rules with labeled sequence's but no code blocks
+- __[todo]__ Sequence extraction using `@` to return a single result from a sequence (see 2): `Sequence<T R> = (__ R __ @T)*`
+- __[todo]__ Sequence selection using [positive integer's](https://en.wikipedia.org/wiki/Integer) as labels to return an array (no code blocks allowed)
+- __[todo]__ Attributes used by the ePEG.js compiler passes and generator to customize the generated parser
+- __[todo]__ [Memoization](https://en.wikipedia.org/wiki/Memoization) attribute: `[memoization] RULE = EXPRESSION`
+- __[todo]__ Return type attribute for type-based languages: `[returns = 'Object<Any>'] RULE = EXPRESSION`
+- __[todo]__ Range based repetition: `RULE = RANGE|EXPRESSION`, where `RANGE` can be `min..`, `min..max`, `..max` or `exact`
+- __[todo]__ A language independent bytecode generator that can be used to build a parser in any language
+- __[todo]__ Class based and single function based JavaScript (ES5 or ES2015) parser generators
+
+1) [https://github.com/pegjs/pegjs/issues/217#issuecomment-286595368](https://github.com/pegjs/pegjs/issues/217#issuecomment-286595368)
+2) [https://github.com/pegjs/pegjs/issues/217#issuecomment-287097614](https://github.com/pegjs/pegjs/issues/217#issuecomment-287097614)
 
 # install
 
-###### to use as a command line tool
+###### command line tool
 
 ```shell
 npm install -g epeg.js
 ```
 
-###### to use as a node.js module
+###### node.js module
 
 ```shell
 npm install --save-dev epeg.js
 ```
 
-# features & changes
+###### development version
 
-###### command line (via `epeg [options] <files ...>`)
-
-* Multi file glob support via command line only
-* Support for `bare` module format when using `-f` or `--format`
-* Verbose logging if `--verbose` is passed to ePeg.js
-
-###### core changes (via `var epeg = require('epeg.js')`)
-
-ePeg.js adds a number of optional syntax extensions and/or compiler passes via plugins that enable the following (all available as exported plugins):
-
-* Multi file support via `epeg.generate(input, { files: [...] })` _(no glob support)_
-* Include statements (`@include ...`) for local grammar files
-* Import statements (`@import ...`) for Node.js modules that contain grammar files
-* Template rules (`rule<T> = ... b:T ...`) to avoid repeated PEG.js grammar
-* AST generator for rules with labeled sequence's but no code blocks
+```shell
+git clone https://github.com/futagoza/ePEG.js.git
+cd ePEG.js
+npm install
+npm run build
+```
 
 # license
 
