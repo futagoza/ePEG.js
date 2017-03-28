@@ -1,36 +1,39 @@
 'use strict'
 
-var globby = require('globby')
-var rimraf = require('rimraf')
-var argv = process.argv.slice(2)
+const globby = require( 'globby' )
+const rimraf = require( 'rimraf' )
+let argv = process.argv.slice( 2 )
 
-function handleError ( err ) {
-  if ( err ) {
-    console.error(err.stack || err.message || err)
-    process.exit(1)
-  }
+function handleError( err ) {
+
+  if ( ! err ) return void 0
+
+  console.error( err.stack || err.message || err )
+  process.exit( 1 )
+
 }
 
 if ( argv.length === 0 ) {
 
   argv = [
-    'benchmark',
     'bin',
     'lib',
-    'spec',
+    'test',
     'examples/*.js',
     'npm-debug.log'
   ]
 
 }
 
-globby(argv)
-  .then(function(files){
-    files.forEach(function(path){
-      rimraf(path, function(err){
-        handleError(err)
-        console.log('Removed ' + path)
-      })
-    })
-  })
-  .catch(handleError)
+globby( argv )
+
+  .catch( handleError )
+
+  .then( files => files.forEach( path =>
+
+    rimraf( path, err => {
+      handleError( err )
+      console.log( 'Removed ' + path )
+    } )
+
+  ) )
