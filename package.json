@@ -1,59 +1,61 @@
 {
-  "name": "epeg.js",
-  "version": "0.1.0-dev",
-  "description": "ePEG.js - Extended PEG.js for Node.js 4+",
-  "keywords": [
-    "pegjs",
-    "epeg",
-    "extended",
-    "lexer generator",
-    "parser generator",
-    "PEG"
-  ],
-  "repository": "futagoza/ePEG.js",
-  "bugs": "https://github.com/futagoza/ePEG.js/issues",
-  "license": "MIT",
-  "author": "Futago-za Ryuu",
-  "main": "lib/epeg.js",
-  "bin": {
-    "epeg": "bin/epeg.js",
-    "pegjs": "bin/peg.js"
-  },
-  "scripts": {
-    "rebuild": "npm run clean && npm run build",
-    "build": "run-p -cl generate:*",
-    "generate:bin": "node scripts/generate -R bin",
-    "generate:lib": "node scripts/generate -R lib",
-    "generate:test": "node scripts/generate -R test",
-    "lint": "eslint --cache . scripts src",
-    "benchmark": "node test/benchmark",
-    "spec": "node test/spec",
-    "test": "run-s -cn lint benchmark spec",
-    "clean": "node scripts/remove"
-  },
-  "dependencies": {
-    "jsonc-parser": "0.4.0",
-    "commander": "2.9.0",
-    "globby": "6.1.0",
-    "mkdirp": "0.5.1",
-    "babel-runtime": "6.23.0"
-  },
-  "devDependencies": {
-    "npm-run-all": "4.0.2",
-    "pegjs-dev": "0.10.0-117",
-    "eslint": "3.18.0",
-    "eslint-config-mdcs": "4.2.2",
-    "babel-eslint": "7.2.1",
-    "babel-core": "6.24.0",
-    "babel-plugin-resolver": "1.1.0",
-    "babel-preset-env": "1.2.2",
-    "babel-preset-stage-0": "6.22.0",
-    "babel-plugin-transform-runtime": "6.23.0",
-    "benchr": "3.4.0",
-    "mocha": "3.2.0",
-    "rimraf": "2.6.1"
-  },
-  "engines": {
-    "node": ">= 4.0.0"
-  }
+    "name": "epeg.js",
+    "version": "0.0.0",
+    "description": "ePEG.js - Extended PEG.js for Node.js 4+",
+    "keywords": [
+        "pegjs",
+        "epeg",
+        "extended",
+        "lexer generator",
+        "parser generator",
+        "PEG"
+    ],
+    "repository": "futagoza/ePEG.js",
+    "bugs": "https://github.com/futagoza/ePEG.js/issues",
+    "license": "MIT",
+    "author": "Futago-za Ryuu",
+    "main": "lib/index.js",
+    "bin": {
+        "epeg": "bin/epeg.js",
+        "pegjs": "bin/peg.js"
+    },
+    "scripts": {
+        "preversion": "npm install && npm test",
+        "postversion": "git push --follow-tags && npm publish",
+        "rebuild": "npm run clean && npm run build",
+        "build": "run-s compile:*",
+        "compile:pegjs": "node scripts/build-parser",
+        "compile:esnext": "node scripts/transpile",
+        "lint": "eslint --cache bin scripts src",
+        "benchmark": "node scripts/benchmark",
+        "spec": "node scripts/spec-runner",
+        "test": "run-s \"lint -- --quiet\" benchmark spec",
+        "clean": "node scripts/remove"
+    },
+    "dependencies": {
+        "commander": "2.9.0",
+        "globby": "6.1.0",
+        "mkdirp": "0.5.1",
+        "babel-runtime": "6.23.0"
+    },
+    "devDependencies": {
+        "npm-run-all": "4.0.2",
+        "pegjs-dev": "0.10.0-117",
+        "eslint": "3.19.0",
+        "eslint-config-futagozaryuu": "2.0.0",
+        "babel-core": "6.24.0",
+        "babel-preset-env": "1.3.2",
+        "babel-preset-stage-0": "6.22.0",
+        "babel-plugin-transform-runtime": "6.23.0",
+        "benchr": "3.4.0",
+        "mocha": "3.2.0",
+        "rimraf": "2.6.1"
+    },
+    "engines": {
+        "node": ">= 4.0.0"
+    },
+    "eslintConfig": {
+        "extends": "futagozaryuu/node-v4",
+        "root": true
+    }
 }

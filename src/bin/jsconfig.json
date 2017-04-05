@@ -1,8 +1,0 @@
-{
-    "header": "#!/usr/bin/env node$(EOL)$(EOL)",
-    "entry": [
-        "epeg",
-        "peg"
-    ],
-    "extends": "../vscode.json"
-}

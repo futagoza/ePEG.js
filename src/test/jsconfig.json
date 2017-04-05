@@ -1,8 +1,0 @@
-{
-    "header": "#!/usr/bin/env node$(EOL)$(EOL)",
-    "entry": [
-        "benchmark",
-        "spec"
-    ],
-    "extends": "../vscode.json"
-}

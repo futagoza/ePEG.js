@@ -1,6 +1,6 @@
-/bin
 /lib
 /node_modules
-/test
 /examples/*.js
+/.eslintcache
+/.mtcache.json
 /npm-debug.log

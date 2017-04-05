@@ -1,4 +1,0 @@
-{
-    "entry": "epeg",
-    "extends": "../vscode.json"
-}

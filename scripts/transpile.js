@@ -1,93 +1,136 @@
-'use strict'
+"use strict";
 
-/*--------- 1) Dependencies ---------*/
+/* --------- 1) Dependencies ---------*/
 
-var fs = require('fs')
-var path = require('path')
-var program = require('commander')
-var babel = require('babel-core')
-var mkdirp = require('mkdirp').sync
+const fs = require( "fs" );
+const path = require( "path" );
+const babel = require( "babel-core" );
+const globby = require( "globby" );
+const mkdirp = require( "mkdirp" );
 
-/*--------- 2) Options ---------*/
+/* --------- 2) Options ---------*/
 
-program
-  .option('--sourceMaps', 'enable source maps for generated files')
-  .option('-c, --compact', 'do not include superfluous whitespace characters and line terminators')
-  .option('-m, --minify', 'minifies generated source before writing files')
-  .option('--comments', 'preserve comments from source files to generated files')
-  .option('-R, --target <dir>', 'select directory in source to build (default: all)', 'all')
-  .parse(process.argv)
+const EOL = require( "os" ).EOL;
+const SEPARATOR = path.sep;
+const WORKING_DIR = process.cwd();
 
-var options = {
-  babelrc: false,
-  presets: [
-    "es2015-node4",
-    "stage-0"
-  ],
-  plugins: [
-    ["transform-runtime", {
-      "polyfill": true,
-      "regenerator": false
-    }]
-  ],
-  sourceMaps: !!program.sourceMaps ? "both" : false,
-  compact: program.compact ? true : 'auto',
-  minified: !!program.minify,
-  comments: !!program.comments
+const options = {
+    "babelrc": false,
+    "comments": true,
+    "compact": "auto",
+    "minified": false,
+    "plugins": [
+        [
+            "transform-runtime", {
+                "polyfill": true,
+                "regenerator": false
+            }
+        ]
+    ],
+    "presets": [
+        [
+            "env", {
+                "targets": {
+                    "node": 4
+                },
+                "modules": "commonjs",
+                "loose": true
+            }
+        ],
+        "stage-0"
+    ],
+    shouldPrintComment( comment ) {
+
+        return comment.startsWith( "eslint" ) === false;
+
+    },
+    sourceMaps: true
+};
+
+/* --------- 3) Utils ---------*/
+
+const connect = path.join;
+const exists = fs.existsSync;
+const relative = path.relative;
+
+function format( filename ) {
+
+    return filename
+        .replace( WORKING_DIR, "" )
+        .replace( /\\/g, "/" )
+        .slice( 1 );
+
 }
 
-/*--------- 3) Utils ---------*/
+function pathinfo( filename ) {
 
-var __cwdname = process.cwd()
+    const parts = filename.split( SEPARATOR );
 
-var resolve = path.join
+    return {
 
-var format = function ( filename ) {
-  return filename.replace(__cwdname, '').slice(1)
+        Path: filename,
+        Name: parts.pop(),
+        Dir: parts.join( SEPARATOR )
+
+    };
+
 }
 
-function transform ( from, to ) {
-  var source = fs.readFileSync(from, 'utf-8')
-  options.filename = from
-  source = babel.transform(source, options)
-  mkdirp(path.dirname(to))
-  fs.writeFileSync(to, source.code + '\n')
-  if ( options.sourceMaps ) {
-    fs.writeFileSync(to + '.map', source.map)
-  }
-  console.log(format(from) + ' -> ' + format(to))
+function stringify( object ) {
+
+    return JSON.stringify( object, null, "  " );
+
 }
 
-/*--------- 4) Transpile... ---------*/
+function writeFile( filename, data ) {
 
-function transpile ( basename ) {
-  var from = resolve(__cwdname, 'src', basename)
-  var stat = fs.lstatSync(from)
-  if ( stat.isDirectory() )
-    fs.readdirSync(from)
-      .forEach(function(item){
-        transpile(resolve(basename, item))
-      })
-  else
-    if ( path.extname(basename) === '.js' ) {
-      transform(from, resolve(__cwdname, basename))
-    }
+    fs.writeFileSync( filename, data, { encoding: "utf8" } );
+
 }
 
-var target = program.target
+/* --------- 4) Transpile... ---------*/
 
-if ( target && target !== 'all' ) {
+const mtcache = connect( WORKING_DIR, ".mtcache.json" );
+const cache = exists( mtcache ) ? require( mtcache ) : {};
 
-  if ( target.indexOf(',') !== -1 )
-    target.split(",").map(function(s){ return s.trim() }).forEach(transpile)
-  else
-    transpile(target)
+globby.sync( [ "src/**/*.js" ], { cwd: WORKING_DIR } )
 
-} else {
+    .forEach( id => {
 
-  transpile('benchmark')
-  transpile('bin')
-  transpile('lib')
-  transpile('spec')
+        const source = pathinfo( connect( WORKING_DIR, id ) );
+        const target = pathinfo( connect( WORKING_DIR, "lib", id.slice( 4 ) ) );
+        const relativeName = relative( target.Dir, source.Path );
+        const stat = fs.lstatSync( source.Path );
+        const mtime = +stat.mtime;
+
+        if (
+            stat.isFile() &&
+            exists( target.Path ) &&
+            mtime === cache[ id ]
+        ) return false;
+
+        cache[ id ] = mtime;
+        cache.updated = true;
+        options.filename = source.Path;
+        options.filenameRelative = relativeName;
+        options.sourceFileName = relativeName;
+        options.sourceMapTarget = relativeName;
+        options.sourceRoot = relative( target.Dir, source.Dir );
+
+        const input = fs.readFileSync( source.Path, "utf8" );
+        const output = babel.transform( input, options );
+
+        mkdirp.sync( target.Dir );
+        writeFile( target.Path, `${ output.code + EOL + EOL }//# sourceMappingURL=${ source.Name }.map${ EOL }` );
+        writeFile( target.Path + ".map", stringify( output.map ) + EOL );
+
+        console.log( format( source.Path ) + " -> " + format( target.Path ) );
+
+    } );
+
+if ( cache.updated ) {
+
+    delete cache.updated;
+    writeFile( mtcache, stringify( cache ) );
 
 }

@@ -1,39 +1,22 @@
-'use strict'
+"use strict";
 
-const globby = require( 'globby' )
-const rimraf = require( 'rimraf' )
-let argv = process.argv.slice( 2 )
+const rimraf = require( "rimraf" );
 
-function handleError( err ) {
+require( "globby" )
 
-  if ( ! err ) return void 0
+    .sync( [
 
-  console.error( err.stack || err.message || err )
-  process.exit( 1 )
+        "lib",
+        "examples/*.js",
+        ".eslintcache",
+        ".mtcache.json",
+        "npm-debug.log"
 
-}
+    ] )
 
-if ( argv.length === 0 ) {
+    .forEach( match => {
 
-  argv = [
-    'bin',
-    'lib',
-    'test',
-    'examples/*.js',
-    'npm-debug.log'
-  ]
+        rimraf.sync( match );
+        console.log( "Removed " + match );
 
-}
-
-globby( argv )
-
-  .catch( handleError )
-
-  .then( files => files.forEach( path =>
-
-    rimraf( path, err => {
-      handleError( err )
-      console.log( 'Removed ' + path )
-    } )
-
-  ) )
+    } );

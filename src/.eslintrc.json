@@ -1,0 +1,20 @@
+{
+    "extends": [
+        "futagozaryuu/esnext",
+        "futagozaryuu/node"
+    ],
+    "globals": {
+        "suite": true,
+        "benchmark": true,
+        "describe": true,
+        "it": true,
+        "before": true,
+        "after": true,
+        "beforeEach": true,
+        "afterEach": true
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "root": true
+}
