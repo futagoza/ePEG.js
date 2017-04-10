@@ -1,27 +1,15 @@
-// PEG.js Grammar
-// ==============
-//
-// PEG.js grammar syntax is designed to be simple, expressive, and similar to
-// JavaScript where possible. This means that many rules, especially in the
-// lexical part, are based on the grammar from ECMA-262, 5.1 Edition [1]. Some
-// are directly taken or adapted from the JavaScript example grammar (see
-// examples/javascript.pegjs).
-//
-// Limitations:
-//
-//   * Non-BMP characters are completely ignored to avoid surrogate pair
-//     handling.
-//
-//   * One can create identifiers containing illegal characters using Unicode
-//     escape sequences. For example, "abcd\u0020efgh" is not a valid
-//     identifier, but it is accepted by the parser.
-//
-// Both limitations could be resolved, but the costs would likely outweigh
-// the benefits.
-//
-// [1] http://www.ecma-international.org/publications/standards/Ecma-262.htm
+/*
+ *
+ * ePEG.js Grammar
+ * ===============
+ *
+ * This grammar is an extended version of the PEG.js grammar (22 Sep 2016).
+ *
+ */
 
 {
+  const peg$location = location;
+
   const OPS_TO_PREFIXED_TYPES = {
     "$": "text",
     "&": "simple_and",
@@ -49,6 +37,18 @@
 
   function buildList(head, tail, index) {
     return [head].concat(extractList(tail, index));
+  }
+
+  if ( typeof options.filename === "string" ) {
+    location = function namedLocation() {
+      var position = peg$location();
+      position.filename = options.filename;
+      return position;
+    };
+  }
+
+  if ( typeof options.location === false ) {
+    location = function noop() { };
   }
 }
 

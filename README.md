@@ -11,7 +11,7 @@ Originally intended to be a set of plugins for [PEG.js](https://github.com/pegjs
 # features
 
 - Multi file glob support via command line: `epegjs [OPTIONS] <...files>`
-- __[todo]__ An _optional_ location field returned with every AST of a ePEG.js grammar file
+- __[WIP]__ An _optional_ location field returned with every AST of a ePEG.js grammar file
 - __[todo]__ `@import FILENAME` will import all rules from `FILENAME`, which can be a PEG.js or ePEG.js gammar file
 - __[todo]__ `@import RULE = FILENAME` will import the given `RULE` only from the `FILENAME` grammar
 - __[todo]__ Template rules (`Sequence<T R> = (__ R __ T)*`) to avoid repeated PEG.js grammar
