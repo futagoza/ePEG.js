@@ -16,9 +16,6 @@ const WORKING_DIR = process.cwd();
 
 const options = {
     "babelrc": false,
-    "comments": true,
-    "compact": "auto",
-    "minified": false,
     "plugins": [
         [
             "transform-runtime", {
@@ -28,22 +25,8 @@ const options = {
         ]
     ],
     "presets": [
-        [
-            "env", {
-                "targets": {
-                    "node": 4
-                },
-                "modules": "commonjs",
-                "loose": true
-            }
-        ],
-        "stage-0"
+        [ "futagozaryuu" ]
     ],
-    shouldPrintComment( comment ) {
-
-        return comment.startsWith( "eslint" ) === false;
-
-    },
     sourceMaps: true
 };
 
