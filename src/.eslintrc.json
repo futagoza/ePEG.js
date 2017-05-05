@@ -13,8 +13,5 @@
         "beforeEach": true,
         "afterEach": true
     },
-    "parserOptions": {
-        "sourceType": "module"
-    },
     "root": true
 }
