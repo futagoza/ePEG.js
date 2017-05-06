@@ -7,6 +7,7 @@ const path = require( "path" );
 const babel = require( "babel-core" );
 const globby = require( "globby" );
 const mkdirp = require( "mkdirp" );
+const chalk = require( "chalk" );
 
 /* --------- 2) Options ---------*/
 
@@ -107,6 +108,19 @@ globby.sync( [ "src/**/*.js" ], { cwd: WORKING_DIR } )
         writeFile( target.Path, `${ output.code + EOL + EOL }//# sourceMappingURL=${ source.Name }.map${ EOL }` );
         writeFile( target.Path + ".map", JSON.stringify( output.map, null, "  " ) + EOL );
 
-        console.log( source.id() + " -> " + target.id() );
+        const base = input.length;
+        const peak = output.code.length;
+        const percentage = Math.round( ( peak - base ) / base * 100 );
+        let note = "";
+
+        if ( base < peak )
+
+            note = chalk.red( percentage + "% bigger" );
+
+        else
+
+            note = chalk.green( -percentage + "% smaller" );
+
+        console.log( source.id() + " -> " + target.id() + " " + note );
 
     } );
