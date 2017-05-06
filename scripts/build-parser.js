@@ -3,13 +3,11 @@
 /* --------- 1) Dependencies ---------*/
 
 const fs = require( "fs" );
-const path = require( "path" );
 const mkdirp = require( "mkdirp" );
 const peg = require( "pegjs-dev" );
 
 /* --------- 2) Options ---------*/
 
-const mtcache = path.join( __dirname, "..", ".mtcache.json" );
 const source = "src/parser.pegjs";
 const target = "lib/parser.js";
 
@@ -21,31 +19,22 @@ const options = {
     trace: true
 };
 
-/* --------- 3) Utils ---------*/
+/* --------- 3) Generate ---------*/
 
-const exists = fs.existsSync;
+function mtime( filename ) {
 
-function writeFile( filename, data ) {
-
-    fs.writeFileSync( filename, data, { encoding: "utf8" } );
+    return +( fs.lstatSync( filename ) ).mtime;
 
 }
 
-/* --------- 4) Generate ---------*/
-
-const mtime = +( fs.lstatSync( source ) ).mtime;
-const cache = exists( mtcache ) ? require( mtcache ) : {};
-
-if ( ! exists( target ) || mtime !== cache[ source ] ) {
+if ( ! fs.existsSync( target ) || mtime( source ) > mtime( target ) ) {
 
     mkdirp.sync( "lib" );
-    cache[ source ] = mtime;
 
     const grammar = fs.readFileSync( source, "utf8" );
     const parser = peg.generate( grammar, options );
 
-    writeFile( target, parser );
-    writeFile( mtcache, JSON.stringify( cache, null, "  " ) );
+    fs.writeFileSync( target, parser, "utf8" );
     console.log( source + " -> " + target );
 
 }

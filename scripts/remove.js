@@ -9,7 +9,6 @@ require( "globby" )
         "lib",
         "examples/*.js",
         ".eslintcache",
-        ".mtcache.json",
         "npm-debug.log"
 
     ] )

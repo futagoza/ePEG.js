@@ -33,35 +33,46 @@ const options = {
 /* --------- 3) Utils ---------*/
 
 const connect = path.join;
-const exists = fs.existsSync;
 const relative = path.relative;
-
-function format( filename ) {
-
-    return filename
-        .replace( WORKING_DIR, "" )
-        .replace( /\\/g, "/" )
-        .slice( 1 );
-
-}
 
 function pathinfo( filename ) {
 
     const parts = filename.split( SEPARATOR );
+    let stat = null;
 
     return {
 
         Path: filename,
         Name: parts.pop(),
-        Dir: parts.join( SEPARATOR )
+        Dir: parts.join( SEPARATOR ),
+
+        exists() {
+
+            return fs.existsSync( filename );
+
+        },
+        mtime() {
+
+            stat = stat || fs.lstatSync( filename );
+            return this.exists() && +( stat ).mtime;
+
+        },
+        id() {
+
+            return filename
+                .replace( WORKING_DIR, "" )
+                .replace( /\\/g, "/" )
+                .slice( 1 );
+
+        },
+        isFile() {
+
+            stat = stat || fs.lstatSync( filename );
+            return stat.isFile();
+
+        }
 
     };
-
-}
-
-function stringify( object ) {
-
-    return JSON.stringify( object, null, "  " );
 
 }
 
@@ -73,27 +84,16 @@ function writeFile( filename, data ) {
 
 /* --------- 4) Transpile... ---------*/
 
-const mtcache = connect( WORKING_DIR, ".mtcache.json" );
-const cache = exists( mtcache ) ? require( mtcache ) : {};
-
 globby.sync( [ "src/**/*.js" ], { cwd: WORKING_DIR } )
 
     .forEach( id => {
 
         const source = pathinfo( connect( WORKING_DIR, id ) );
         const target = pathinfo( connect( WORKING_DIR, "lib", id.slice( 4 ) ) );
+
+        if ( source.isFile() && target.exists() && source.mtime() < target.mtime() ) return false;
+
         const relativeName = relative( target.Dir, source.Path );
-        const stat = fs.lstatSync( source.Path );
-        const mtime = +stat.mtime;
-
-        if (
-            stat.isFile() &&
-            exists( target.Path ) &&
-            mtime === cache[ id ]
-        ) return false;
-
-        cache[ id ] = mtime;
-        cache.updated = true;
         options.filename = source.Path;
         options.filenameRelative = relativeName;
         options.sourceFileName = relativeName;
@@ -105,15 +105,8 @@ globby.sync( [ "src/**/*.js" ], { cwd: WORKING_DIR } )
 
         mkdirp.sync( target.Dir );
         writeFile( target.Path, `${ output.code + EOL + EOL }//# sourceMappingURL=${ source.Name }.map${ EOL }` );
-        writeFile( target.Path + ".map", stringify( output.map ) + EOL );
+        writeFile( target.Path + ".map", JSON.stringify( output.map, null, "  " ) + EOL );
 
-        console.log( format( source.Path ) + " -> " + format( target.Path ) );
+        console.log( source.id() + " -> " + target.id() );
 
     } );
-
-if ( cache.updated ) {
-
-    delete cache.updated;
-    writeFile( mtcache, stringify( cache ) );
-
-}

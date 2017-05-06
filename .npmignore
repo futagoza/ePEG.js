@@ -3,5 +3,4 @@ lib/**/__tests__/
 scripts/
 src/
 .eslintcache
-.mtcache.json
 .travis.yml
