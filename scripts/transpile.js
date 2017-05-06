@@ -55,7 +55,7 @@ function pathinfo( filename ) {
         mtime() {
 
             stat = stat || fs.lstatSync( filename );
-            return this.exists() && +( stat ).mtime;
+            return this.exists() && +stat.mtime;
 
         },
         id() {
@@ -110,7 +110,7 @@ globby.sync( [ "src/**/*.js" ], { cwd: WORKING_DIR } )
 
         const base = input.length;
         const peak = output.code.length;
-        const percentage = Math.round( ( peak - base ) / base * 100 );
+        const percentage = Math.round( ( ( peak - base ) / base ) * 100 );
         let note = "";
 
         if ( base < peak )
