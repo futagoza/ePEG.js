@@ -38,7 +38,6 @@
         "jkroso-type": "1.1.1",
         "equals": "1.0.5",
         "globby": "6.1.0",
-        "jsesc": "2.5.1",
         "mkdirp": "0.5.1",
         "babel-runtime": "7.0.0-alpha.9"
     },
