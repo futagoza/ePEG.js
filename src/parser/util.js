@@ -1,3 +1,5 @@
+/* eslint no-extra-parens: 0 */
+
 /**
  * An empty function
  *
@@ -112,4 +114,4 @@ export default {
     extractList,
     buildList
 
-}
+};
