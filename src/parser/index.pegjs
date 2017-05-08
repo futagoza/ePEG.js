@@ -8,7 +8,22 @@
  */
 
 {
-  const peg$location = location;
+
+  const tracker = require( "./tracker" );
+  const util = require( "./util" );
+
+  if ( options.location === false ) location = util.noop;
+
+  const positiontracker = tracker.create( input, {
+    filename: options.filename,
+    detailsCache: peg$posDetailsCache
+  } );
+  peg$computePosDetails = positiontracker.compute;
+  peg$computeLocation = positiontracker.generate;
+
+  const extractOptional = util.extractOptional;
+  const extractList = util.extractList;
+  const buildList = util.buildList;
 
   const OPS_TO_PREFIXED_TYPES = {
     "$": "text",
@@ -27,29 +42,6 @@
     "!": "semantic_not"
   };
 
-  function extractOptional(optional, index) {
-    return optional ? optional[index] : null;
-  }
-
-  function extractList(list, index) {
-    return list.map(element => element[index]);
-  }
-
-  function buildList(head, tail, index) {
-    return [head].concat(extractList(tail, index));
-  }
-
-  if ( typeof options.filename === "string" ) {
-    location = function namedLocation() {
-      var position = peg$location();
-      position.filename = options.filename;
-      return position;
-    };
-  }
-
-  if ( typeof options.location === false ) {
-    location = function noop() { };
-  }
 }
 
 // ---- Syntactic Grammar -----
