@@ -40,16 +40,16 @@
         "globby": "6.1.0",
         "jsesc": "2.5.1",
         "mkdirp": "0.5.1",
-        "babel-runtime": "6.23.0"
+        "babel-runtime": "7.0.0-alpha.9"
     },
     "devDependencies": {
         "npm-run-all": "4.0.2",
         "pegjs-dev": "0.10.0-117",
         "eslint": "3.19.0",
-        "eslint-config-futagozaryuu": "2.2.0",
-        "babel-core": "6.24.1",
-        "babel-preset-futagozaryuu": "1.3.0",
-        "babel-plugin-transform-runtime": "6.23.0",
+        "eslint-config-futagozaryuu": "2.2.1",
+        "babel-core": "7.0.0-alpha.9",
+        "babel-preset-futagozaryuu": "2.1.0",
+        "babel-plugin-transform-runtime": "7.0.0-alpha.9",
         "benchr": "3.4.0",
         "mocha": "3.3.0",
         "rimraf": "2.6.1"
