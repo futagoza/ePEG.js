@@ -8,8 +8,8 @@ const peg = require( "pegjs-dev" );
 
 /* --------- 2) Options ---------*/
 
-const source = "src/parser.pegjs";
-const target = "lib/parser.js";
+const source = "src/parser/index.pegjs";
+const target = "lib/parser/index.js";
 
 const options = {
     filename: source,
@@ -29,7 +29,7 @@ function mtime( filename ) {
 
 if ( ! fs.existsSync( target ) || mtime( source ) > mtime( target ) ) {
 
-    mkdirp.sync( "lib" );
+    mkdirp.sync( "lib/parser" );
 
     const grammar = fs.readFileSync( source, "utf8" );
     const parser = peg.generate( grammar, options );
