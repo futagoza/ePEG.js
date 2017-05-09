@@ -1,3 +1,4 @@
+data/
 examples/*.js
 lib/**/__tests__/
 scripts/
